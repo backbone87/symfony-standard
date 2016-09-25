@@ -1,0 +1,38 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="security.csrf.token_storage.request_stack.key">_csrf_token_storage</parameter>
+    </parameters>
+
+    <services>
+        <service id="security.csrf.token_generator" class="Symfony\Component\Security\Csrf\TokenGenerator\UriSafeTokenGenerator" public="false" />
+
+        <service id="security.csrf.token_storage" alias="security.csrf.token_storage.request_stack" />
+
+        <service id="security.csrf.token_storage.request_stack" class="Symfony\Component\Security\Csrf\TokenStorage\RequestStackTokenStorage" public="false">
+            <argument type="service" id="request_stack" />
+            <argument type="service" id="security.csrf.token_storage.factory" />
+            <argument>%security.csrf.token_storage.request_stack.key%</argument>
+        </service>
+        <service id="security.csrf.token_storage.factory" alias="security.csrf.token_storage.factory.cookie" />
+
+        <service id="security.csrf.token_storage.factory.cookie" class="Symfony\Component\Security\Csrf\TokenStorage\CookieTokenStorageFactory" public="false">
+            <argument>%secret%</argument>
+            <argument>60</argument>
+        </service>
+
+        <service id="security.csrf.token_storage.cookie_listener" class="Symfony\Component\Security\Csrf\TokenStorage\CookieTokenStorageListener">
+            <tag name="kernel.event_subscriber" />
+            <argument>%security.csrf.token_storage.request_stack.key%</argument>
+        </service>
+
+        <service id="security.csrf.token_manager" class="Symfony\Component\Security\Csrf\CsrfTokenManager">
+            <argument type="service" id="security.csrf.token_generator" />
+            <argument type="service" id="security.csrf.token_storage" />
+        </service>
+    </services>
+</container>
