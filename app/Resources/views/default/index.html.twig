@@ -7,8 +7,22 @@
                 <h1><span>Welcome to</span> Symfony {{ constant('Symfony\\Component\\HttpKernel\\Kernel::VERSION') }}</h1>
             </div>
 
-            <p>Submitted: {{ submitted }} - Valid: {{ valid }}</p>
+            Cookies (Symfony Request)
+            {{ dump(cookies.all) }}
 
+            Cookies (PHP)
+            {{ dump(cookies_php) }}
+
+            Cookies (HTTP)
+            {{ dump(cookies_raw) }}
+
+            Submitted
+            {{ dump(submitted) }}
+
+            Valid
+            {{ dump(valid) }}
+
+            Form
             {{ form(form) }}
 
         </div>

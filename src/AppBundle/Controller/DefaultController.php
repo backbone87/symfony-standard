@@ -12,6 +12,7 @@ class DefaultController extends Controller
 {
     /**
      * @Route("/", name="homepage")
+     * @Route("/sub", name="homepage_sub")
      */
     public function indexAction(Request $request)
     {
@@ -23,10 +24,13 @@ class DefaultController extends Controller
 
         // replace this example code with whatever you need
         return $this->render('default/index.html.twig', [
-            'base_dir'  => realpath($this->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
-            'form'      => $form->createView(),
-            'submitted' => $form->isSubmitted(),
-            'valid'     => $form->isValid(),
+            'base_dir'    => realpath($this->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
+            'form'        => $form->createView(),
+            'submitted'   => $form->isSubmitted(),
+            'valid'       => $form->isValid(),
+            'cookies'     => $request->cookies,
+            'cookies_php' => $_COOKIE,
+            'cookies_raw' => $request->headers->get('Cookie'),
         ]);
     }
 }
